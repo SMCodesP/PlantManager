@@ -7,6 +7,8 @@ import {
 import AppLoading from "expo-app-loading";
 
 import { Routes } from "./src/routes";
+import { PlantProvider } from "./src/contexts/PlantContext";
+import { UserProvider } from "./src/contexts/UserContext";
 
 const App: React.FC = () => {
   const [fontIsLoading] = useFonts({
@@ -16,7 +18,13 @@ const App: React.FC = () => {
 
   if (!fontIsLoading) return <AppLoading />;
 
-  return <Routes />;
+  return (
+    <UserProvider>
+      <PlantProvider>
+        <Routes />
+      </PlantProvider>
+    </UserProvider>
+  );
 };
 
 export default App;

@@ -9,17 +9,22 @@ import {
   TouchableWithoutFeedback,
   Platform,
   Keyboard,
+  Alert,
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import colors from "../styles/colors";
 import fonts from "../styles/fonts";
 
 import { Button } from "../components/Button";
+import { ConfirmationParams } from "./Confirmation";
+import { useUser } from "../contexts/UserContext";
 
 export const UserIdentification: React.FC = () => {
   const navigation = useNavigation();
+  const { setUsername } = useUser();
 
   const [isFocused, setIsFocused] = useState(false);
   const [name, setName] = useState("");
@@ -32,8 +37,16 @@ export const UserIdentification: React.FC = () => {
     setIsFocused(true);
   };
 
-  const handleSubmit = () => {
-    navigation.navigate("Confirmation");
+  const handleSubmit = async () => {
+    setUsername(name);
+    navigation.navigate("Confirmation", {
+      icon: "smile",
+      title: "Prontinho!",
+      subTitle:
+        "Agora vamos começar a cuidar das suas plantinhas com muito cuidado.",
+      buttonTitle: "Começar",
+      nextScreen: "PlantSelect",
+    } as ConfirmationParams);
   };
 
   return (

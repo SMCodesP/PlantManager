@@ -20,7 +20,11 @@ import api from "../services/api";
 import Environment from "../entities/Environment";
 import Plant from "../entities/Plant";
 
+import { useNavigation } from "@react-navigation/native";
+
 export const PlantSelect: React.FC = () => {
+  const navigation = useNavigation();
+
   const [environments, setEnvironments] = useState<Environment[]>([]);
   const [plants, setPlants] = useState<Plant[]>([]);
   const [environmentSelected, setEnvironmentSelected] = useState("");
@@ -94,6 +98,10 @@ export const PlantSelect: React.FC = () => {
     setEnvironmentSelected(environment);
   };
 
+  const handlePlantSelect = (plant: Plant) => {
+    navigation.navigate("PlantSave", { plant });
+  };
+
   if (loading) return <Load />;
 
   return (
@@ -129,7 +137,12 @@ export const PlantSelect: React.FC = () => {
           showsVerticalScrollIndicator={false}
           keyExtractor={(item) => String(item.id)}
           numColumns={2}
-          renderItem={({ item }) => <PlantCardPrimary data={item} />}
+          renderItem={({ item }) => (
+            <PlantCardPrimary
+              onPress={() => handlePlantSelect(item)}
+              data={item}
+            />
+          )}
           onEndReached={({ distanceFromEnd }) => handleMore(distanceFromEnd)}
           onEndReachedThreshold={0.1}
           contentContainerStyle={styles.listPlants}
